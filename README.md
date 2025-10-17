@@ -21,36 +21,50 @@ Setiap buku memiliki 5 atribut utama, yaitu:
 ## Program ini dapat melakukan:
 
 ### Menampilkan Data
+Saat program dijalankan, program langsung menampilkan data buku dari database MySQL
+ke dalam tabel (JTable) dengan kolom No, ID Buku, Judul, Jenis, Genre, dan Harga.
 
-Saat program dijalankan, program akan langsung menampilkan **data buku dalam tabel (`JTable`)**  
-yang berisi kolom **No, ID Buku, Judul, Jenis, Genre, dan Harga.**
 
 ### Menambahkan Data
 
-Untuk menambah data baru, pengguna dapat mengisi **form input** yang terdiri dari **ID Buku, Judul, Jenis, Genre, dan Harga.**  
-Data yang berhasil ditambahkan akan langsung muncul di tabel,  
-dan sistem akan menampilkan pesan notifikasi:
+Pengguna dapat menambahkan data baru dengan mengisi form input yang terdiri dari ID Buku, Judul, Jenis, Genre, dan Harga.
+
+Program akan melakukan validasi otomatis, meliputi:
+- Semua kolom wajib diisi (tidak boleh kosong)
+- Harga harus berupa angka
+- ID Buku tidak boleh sama dengan yang sudah ada di database
+
+Jika semua validasi terpenuhi, data akan disimpan ke database dan langsung muncul di tabel.
+Sistem juga menampilkan pesan notifikasi:
 
 > “Data Buku Berhasil Ditambahkan :)”
 
-sebagai konfirmasi bahwa data telah tersimpan.
+Jika ID yang dimasukan sudah ada akan menampilkan notifikasi:
+
+> "Buat ID baru woy jangan sama!"
+
+Jika Harga yang di masukan bukan angka akan menampilkan notifikasi:
+
+> "Woy harga tuh harus diisi angka!"
+
+Jika Kolom tidak diisi semua akan menampilkan notifikasi:
+
+> "Yang lengkap hey!!!"
 
 ### Mengedit Data
 
-Pengguna dapat melakukan **perubahan terhadap data** yang sudah ada dengan cara **mengklik salah satu baris pada tabel.**  
-Setelah melakukan perubahan, pengguna menekan tombol **Update** untuk menyimpan data baru.  
-Program kemudian memperbarui tabel dan **mengosongkan form** agar siap untuk input berikutnya.
+Untuk mengubah data buku, pengguna dapat mengklik salah satu baris pada tabel. Data dari baris tersebut akan otomatis muncul ke form input. Tombol Add berubah menjadi Update, dan tombol Delete menjadi terlihat. Setelah melakukan perubahan, pengguna menekan tombol Update, program akan memvalidasi input kembali dan memperbarui data di database MySQL. Tabel akan diperbarui dan form dikosongkan setelah proses berhasil.
 
 ### Menghapus Data
 
-Fitur **hapus data** memungkinkan pengguna menghapus buku yang tidak diperlukan.  
-Langkahnya adalah dengan **memilih baris yang ingin dihapus**, lalu menekan tombol **Delete.**  
-Sebelum data benar-benar dihapus, muncul dialog konfirmasi berisi pesan:
+Fitur hapus data memungkinkan pengguna untuk menghapus buku dari database.
+Langkahnya adalah dengan memilih baris yang ingin dihapus, lalu menekan tombol Delete.
+Sebelum dihapus, sistem akan menampilkan dialog konfirmasi:
 
 > “Apakah kamu yakin ingin menghapus buku ini? :(”
 
-Jika pengguna memilih **Yes**, data akan dihapus dari database dan tabel diperbarui.  
-Jika memilih **No**, proses penghapusan dibatalkan dan muncul pesan:
+Jika pengguna memilih Yes, data dihapus dari database dan tabel diperbarui.
+Jika memilih No, proses dibatalkan dan muncul pesan:
 
 > “Penghapusan dibatalkan.”
 
@@ -58,58 +72,59 @@ Jika memilih **No**, proses penghapusan dibatalkan dan muncul pesan:
 
 # Penjelasan Alur
 
-Program **ProductMenu** ini berfungsi sebagai **aplikasi manajemen data buku berbasis Java Swing**,  
-di mana program ini menerapkan konsep **CRUD (Create, Read, Update, Delete)** dengan tampilan **GUI yang interaktif dan mudah digunakan.**
+Program ProductMenu berfungsi sebagai aplikasi manajemen data buku berbasis Java Swing
+yang menerapkan konsep CRUD (Create, Read, Update, Delete) dengan tampilan GUI interaktif dan terhubung langsung ke database MySQL.
 
 ### Berikut alur kerja program secara lengkap:
 
 
 #### Inisialisasi Program
 
-Ketika program dijalankan, objek `ProductMenu` dibuat dan jendela utama (`JFrame`) ditampilkan  
-dengan ukuran **700x600 piksel** serta latar belakang berwarna **abu muda (`Color.LIGHT_GRAY`)**.  
-Komponen seperti **tabel, form input, tombol, dan label** diinisialisasi melalui **main panel**.  
-Kemudian program memanggil metode `populateList()` untuk mengisi daftar awal data buku,  
-dan menampilkan data tersebut ke dalam tabel melalui `setTable()`.
+Saat program dijalankan, objek ProductMenu dibuat dan jendela utama `(JFrame)` ditampilkan
+dengan ukuran 700x600 piksel dan latar abu muda (Color.LIGHT_GRAY).
+Komponen seperti tabel, label, tombol, dan input form diinisialisasi pada mainPanel.
+Koneksi ke database dibuat melalui kelas `Database`,
+dan tabel diisi menggunakan fungsi `setTable()` yang menjalankan query `SELECT * FROM product`.
 
 #### Menampilkan Data ke Tabel
 
-Data buku ditampilkan pada komponen `JTable` menggunakan **DefaultTableModel**.  
-Setiap baris berisi informasi **No, ID Buku, Judul, Jenis, Genre, dan Harga**,  
-sehingga pengguna dapat melihat seluruh daftar buku yang tersedia.
+Fungsi `setTable()` menampilkan seluruh data dari tabel product di database ke dalam `JTable`.
+Data diambil menggunakan objek `ResultSet` dan diisi ke dalam `DefaultTableModel` secara dinamis.
 
 
 #### Menambahkan Data Buku Baru
 
-Ketika pengguna mengisi form (ID, Judul, Jenis, Genre, dan Harga) lalu menekan tombol **Add**,  
-program menjalankan fungsi `insertData()`.  
-Fungsi ini akan mengambil semua nilai dari form input.  
-Setelah data berhasil dimasukkan, data akan ditambahkan ke **list lokal (`listProduct`)**,  
-dan tabel diperbarui menggunakan `productTable.setModel(setTable())`.  
-Lalu form dikosongkan dan muncul pesan notifikasi:
+Ketika tombol Add ditekan, fungsi insertData() dijalankan.
+Program memeriksa:
+- Kolom tidak boleh kosong
+- Harga harus berupa angka
+- ID Buku belum pernah digunakan
 
-> “Data Buku Berhasil Ditambahkan :)”
+Jika validasi lolos, data disimpan ke database melalui perintah SQL:
+
+> INSERT INTO product VALUES (id, judul, jenis, genre, harga);
+
+Tabel diperbarui dengan data terbaru, form dikosongkan, dan pesan sukses muncul.
 
 ####  Memilih dan Mengedit Data
 
-Saat pengguna mengklik salah satu baris dalam tabel, event listener **`MouseAdapter`** menangkap aksi tersebut  
-dan menyalin data dari tabel ke form input.  
-Tombol **Add** berubah menjadi **Update**, dan tombol **Delete** menjadi terlihat.  
-Jika pengguna menekan tombol **Update**, program menjalankan fungsi `updateData()`,  
-yang memperbarui data pada list `listProduct` dan database.  
-Setelah data diperbarui, tabel direfresh, form dikosongkan, dan tombol kembali ke mode default.
+Saat baris tabel diklik, event listener MouseAdapter menyalin data ke form input. Tombol Add berubah menjadi Update, dan pengguna dapat memperbarui informasi.
+Setelah menekan Update, fungsi updateData() dijalankan untuk memperbarui data di database menggunakan perintah:
 
+> UPDATE product 
+SET judul = ..., jenis = ..., genre = ..., harga = ...
+WHERE id = ...;
 
 #### Menghapus Data Buku
 
-Pengguna dapat memilih baris dalam tabel lalu menekan tombol **Delete.**  
-Program akan menampilkan konfirmasi menggunakan **`JOptionPane`** dengan pesan:
+Ketika tombol Delete ditekan, fungsi deleteData() dijalankan.
+Program menampilkan konfirmasi terlebih dahulu melalui JOptionPane.
 
-> “Apakah kamu yakin ingin menghapus buku ini? :(”
+Jika pengguna memilih Yes, maka perintah SQL dijalankan:
 
-Jika pengguna memilih **Yes**, fungsi `deleteData()` dijalankan untuk menghapus data dari `listProduct`  
-dan memperbarui tampilan tabel.  
-Jika memilih **No**, muncul pesan bahwa penghapusan dibatalkan.
+> DELETE FROM product WHERE id = ...;
+
+Tabel diperbarui dan form direset ke keadaan awal.
 
 # Dokumentasi
 
