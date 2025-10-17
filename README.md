@@ -111,8 +111,10 @@ Tabel diperbarui dengan data terbaru, form dikosongkan, dan pesan sukses muncul.
 Saat baris tabel diklik, event listener MouseAdapter menyalin data ke form input. Tombol Add berubah menjadi Update, dan pengguna dapat memperbarui informasi.
 Setelah menekan Update, fungsi updateData() dijalankan untuk memperbarui data di database menggunakan perintah:
 
-> UPDATE product 
+> UPDATE product
+
 > SET judul = ..., jenis = ..., genre = ..., harga = ...
+
 > WHERE id = ...;
 
 #### Menghapus Data Buku
