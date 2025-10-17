@@ -81,7 +81,7 @@ yang menerapkan konsep CRUD (Create, Read, Update, Delete) dengan tampilan GUI i
 #### Inisialisasi Program
 
 Saat program dijalankan, objek ProductMenu dibuat dan jendela utama `(JFrame)` ditampilkan
-dengan ukuran 700x600 piksel dan latar abu muda (Color.LIGHT_GRAY).
+dengan ukuran `700x600` piksel dan latar abu muda (`Color.LIGHT_GRAY`).
 Komponen seperti tabel, label, tombol, dan input form diinisialisasi pada mainPanel.
 Koneksi ke database dibuat melalui kelas `Database`,
 dan tabel diisi menggunakan fungsi `setTable()` yang menjalankan query `SELECT * FROM product`.
@@ -112,8 +112,8 @@ Saat baris tabel diklik, event listener MouseAdapter menyalin data ke form input
 Setelah menekan Update, fungsi updateData() dijalankan untuk memperbarui data di database menggunakan perintah:
 
 > UPDATE product 
-SET judul = ..., jenis = ..., genre = ..., harga = ...
-WHERE id = ...;
+> SET judul = ..., jenis = ..., genre = ..., harga = ...
+> WHERE id = ...;
 
 #### Menghapus Data Buku
 
